@@ -26,7 +26,7 @@ param restore bool = false
 param apimPublisherEmail string = 'support@contososuites.com'
 
 var apiManagementServiceName = 'apim-${uniqueString(resourceGroup().id)}'
-var apimSku = 'Basicv2'
+var apimSku = 'Developer'
 var apimSkuCount = 1
 var apimPublisherName = 'Contoso Suites'
 
