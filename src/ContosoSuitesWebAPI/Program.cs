@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Microsoft.SemanticKernel.ChatCompletion;
-using Azure.ResourceManager;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = new ConfigurationBuilder()
@@ -32,13 +31,6 @@ builder.Services.AddSingleton<MaintenanceCopilot, MaintenanceCopilot>();
 // Create a single instance of the CosmosClient to be shared across the application.
 builder.Services.AddSingleton<CosmosClient>((_) =>
 {
-    //DefaultAzureCredential credential = new();
-
-    //ArmClient client = new(credential); 
-    /*CosmosClient client = new(
-        connectionString: builder.Configuration["CosmosDB:ConnectionString"]!
-    );*/
-
     DefaultAzureCredential credential = new();
 
     CosmosClient client = new(
