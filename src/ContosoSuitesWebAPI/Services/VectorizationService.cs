@@ -1,15 +1,19 @@
 ﻿using Azure.AI.OpenAI;
 using ContosoSuitesWebAPI.Entities;
 using Microsoft.Azure.Cosmos;
+using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.Embeddings;
 
 namespace ContosoSuitesWebAPI.Services
 {
     /// <summary>
     /// The vectorization service for generating embeddings and executing vector searches.
     /// </summary>
-    public class VectorizationService(AzureOpenAIClient openAIClient, CosmosClient cosmosClient, IConfiguration configuration) : IVectorizationService
+#pragma warning disable SKEXP0001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    public class VectorizationService(Kernel kernel/*AzureOpenAIClient openAIClient*/, CosmosClient cosmosClient, IConfiguration configuration) : IVectorizationService
     {
-        private readonly AzureOpenAIClient _client = openAIClient;
+        //private readonly AzureOpenAIClient _client = openAIClient;
+        private readonly Kernel _kernel = kernel;
         private readonly CosmosClient _cosmosClient = cosmosClient;
         private readonly string _embeddingDeploymentName = configuration.GetValue<string>("AzureOpenAI:EmbeddingDeploymentName") ?? "text-embedding-ada-002";
 
@@ -19,14 +23,16 @@ namespace ContosoSuitesWebAPI.Services
         /// </summary>
         public async Task<float[]> GetEmbeddings(string text)
         {
-            var embeddingClient = _client.GetEmbeddingClient(_embeddingDeploymentName);
+            //var embeddingClient = _client.GetEmbeddingClient(_embeddingDeploymentName);
 
             try
             {
                 // Generate a vector for the provided text.
-                var embeddings = await embeddingClient.GenerateEmbeddingAsync(text);
+                //var embeddings = await embeddingClient.GenerateEmbeddingAsync(text);
+                ITextEmbeddingGenerationService textEmbeddingGenerationService = kernel.GetRequiredService<ITextEmbeddingGenerationService>();
+                ReadOnlyMemory<float> embeddings = await textEmbeddingGenerationService.GenerateEmbeddingAsync(text);
 
-                var vector = embeddings.Value.Vector.ToArray();
+                var vector = embeddings.ToArray();
 
                 // Return the vector embeddings.
                 return vector;
@@ -36,7 +42,7 @@ namespace ContosoSuitesWebAPI.Services
                 throw new Exception($"An error occurred while generating embeddings: {ex.Message}");
             }
         }
-
+#pragma warning restore SKEXP0001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         //Exercise 3 Task 3 TODO #2: Uncomment the following code block to execute a vector search query against Cosmos DB.
         /// <summary>
         /// Perform a vector search query against Cosmos DB.
