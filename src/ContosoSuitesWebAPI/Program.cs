@@ -53,16 +53,21 @@ builder.Services.AddSingleton<CosmosClient>((_) =>
  {
      IKernelBuilder kernelBuilder = Kernel.CreateBuilder();
      kernelBuilder.AddAzureOpenAIChatCompletion(
-         deploymentName: builder.Configuration["AzureOpenAI:DeploymentName"]!,
-         endpoint: builder.Configuration["AzureOpenAI:Endpoint"]!,
-         apiKey: builder.Configuration["AzureOpenAI:ApiKey"]!
-     );
+        deploymentName: builder.Configuration["AzureOpenAI:DeploymentName"]!,
+        //endpoint: builder.Configuration["AzureOpenAI:Endpoint"]!,
+        //apiKey: builder.Configuration["AzureOpenAI:ApiKey"]!
+        endpoint: builder.Configuration["ApiManagement:Endpoint"]!,
+        apiKey: builder.Configuration["ApiManagement:ApiKey"]!
+    );
+
 
 #pragma warning disable SKEXP0010 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
      kernelBuilder.AddAzureOpenAITextEmbeddingGeneration(
-         deploymentName: builder.Configuration["AzureOpenAI:EmbeddingDeploymentName"]!,
-         endpoint: builder.Configuration["AzureOpenAI:Endpoint"]!,
-         apiKey: builder.Configuration["AzureOpenAI:ApiKey"]!
+        deploymentName: builder.Configuration["AzureOpenAI:EmbeddingDeploymentName"]!,
+        endpoint: builder.Configuration["ApiManagement:Endpoint"]!,
+        apiKey: builder.Configuration["ApiManagement:ApiKey"]!
+        //endpoint: builder.Configuration["AzureOpenAI:Endpoint"]!,
+        //apiKey: builder.Configuration["AzureOpenAI:ApiKey"]!
      );
 #pragma warning restore SKEXP0010 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
@@ -90,6 +95,10 @@ builder.Services.AddSingleton<CosmosClient>((_) =>
 });*/
 
 var app = builder.Build();
+app.Logger.LogInformation("ApiManagement:Endpoint=>" + builder.Configuration["ApiManagement:Endpoint"]);
+app.Logger.LogInformation("ApiManagement:ApiKey=>" + builder.Configuration["ApiManagement:ApiKey"]);
+app.Logger.LogInformation("AzureOpenAI:Endpoint=>" + builder.Configuration["AzureOpenAI:Endpoint"]);
+app.Logger.LogInformation("AzureOpenAI:ApiKey=>" + builder.Configuration["AzureOpenAI:ApiKey"]);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
