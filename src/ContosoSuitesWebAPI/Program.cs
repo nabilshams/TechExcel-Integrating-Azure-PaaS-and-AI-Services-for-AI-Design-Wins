@@ -44,7 +44,9 @@ builder.Services.AddSingleton<MaintenanceCopilot, MaintenanceCopilot>();
 builder.Services.AddSingleton<CosmosClient>((_) =>
 {
     CosmosClient client = new(
-        connectionString: builder.Configuration["CosmosDB:ConnectionString"]!
+        accountEndpoint: builder.Configuration["CosmosDB:AccountEndpoint"],
+        tokenCredential: new DefaultAzureCredential()
+        //connectionString: builder.Configuration["CosmosDB:ConnectionString"]!
     );
     return client;
 });
