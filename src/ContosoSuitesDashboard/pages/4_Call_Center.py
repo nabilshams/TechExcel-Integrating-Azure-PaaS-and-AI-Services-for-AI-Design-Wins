@@ -10,7 +10,7 @@ from azure.core.credentials import AzureKeyCredential
 from azure.ai.textanalytics import ExtractiveSummaryAction, AbstractiveSummaryAction
 from azure.cosmos import CosmosClient
 import openai
-
+import logging
 
 st.set_page_config(layout="wide")
 
@@ -25,8 +25,8 @@ def create_transcription_request(audio_file, speech_recognition_language="en-US"
     speech_key = st.secrets["speech"]["key"]
     speech_region = st.secrets["speech"]["region"]
 
-    print("speech_key: " + speech_key)
-    print("speech_region: " + speech_region)
+    logging.info("speech_key: " + speech_key)
+    logging.info("speech_region: " + speech_region)
 
     # Create an instance of a speech config with specified subscription key and service region.
     speech_config = speechsdk.SpeechConfig(subscription=speech_key, region=speech_region)
@@ -85,9 +85,9 @@ def make_azure_openai_chat_request(system, call_contents):
     aoai_key = st.secrets["aoai"]["key"]
     aoai_deployment_name = st.secrets["aoai"]["deployment_name"]
 
-    print("aoai_endpoint: " + aoai_endpoint)
-    print("aoai_key: " + aoai_key)
-    print("aoai_deployment_name: " + aoai_deployment_name)
+    logging.info("aoai_endpoint: " + aoai_endpoint)
+    logging.info("aoai_key: " + aoai_key)
+    logging.info("aoai_deployment_name: " + aoai_deployment_name)
 
     client = openai.AzureOpenAI(
         api_key=aoai_key,
