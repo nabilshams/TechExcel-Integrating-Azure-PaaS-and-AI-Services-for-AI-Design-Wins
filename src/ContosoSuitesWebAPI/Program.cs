@@ -45,7 +45,11 @@ builder.Services.AddSingleton<CosmosClient>((_) =>
 {
     CosmosClient client = new(
         accountEndpoint: builder.Configuration["CosmosDB:AccountEndpoint"],
-        tokenCredential: new DefaultAzureCredential()
+        tokenCredential: new DefaultAzureCredential(
+            new DefaultAzureCredentialOptions
+            {
+                ManagedIdentityClientId = builder.Configuration["Identity:DefaultManagedIdentityClientID"]
+            })
         //connectionString: builder.Configuration["CosmosDB:ConnectionString"]!
     );
     return client;
@@ -79,7 +83,11 @@ builder.Services.AddSingleton<CosmosClient>((_) =>
     {
         CosmosClient client = new(
             accountEndpoint: builder.Configuration["CosmosDB:AccountEndpoint"],
-            tokenCredential: new DefaultAzureCredential()
+            tokenCredential: new DefaultAzureCredential(
+                new DefaultAzureCredentialOptions
+                {
+                    ManagedIdentityClientId = builder.Configuration["Identity:DefaultManagedIdentityClientID"]
+                })
             //connectionString: builder.Configuration["CosmosDB:ConnectionString"]!
         );
         return client;
