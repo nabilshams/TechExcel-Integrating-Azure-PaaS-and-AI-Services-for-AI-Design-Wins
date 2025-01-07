@@ -25,6 +25,9 @@ def create_transcription_request(audio_file, speech_recognition_language="en-US"
     speech_key = st.secrets["speech"]["key"]
     speech_region = st.secrets["speech"]["region"]
 
+    print("speech_key: " + speech_key)
+    print("speech_region: " + speech_region)
+
     # Create an instance of a speech config with specified subscription key and service region.
     speech_config = speechsdk.SpeechConfig(subscription=speech_key, region=speech_region)
     speech_config.speech_recognition_language=speech_recognition_language
@@ -81,6 +84,10 @@ def make_azure_openai_chat_request(system, call_contents):
     aoai_endpoint = st.secrets["aoai"]["endpoint"]
     aoai_key = st.secrets["aoai"]["key"]
     aoai_deployment_name = st.secrets["aoai"]["deployment_name"]
+
+    print("aoai_endpoint: " + aoai_endpoint)
+    print("aoai_key: " + aoai_key)
+    print("aoai_deployment_name: " + aoai_deployment_name)
 
     client = openai.AzureOpenAI(
         api_key=aoai_key,
